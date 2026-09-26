@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VELVETIQUE BEAUTY | Premium Beauty E-Commerce</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <header class="header">
+            <nav class="navbar">
+                <a href="index.html" class="logo">VELVETIQUE BEAUTY</a>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link active">Home</a></li>
+                    <li><a href="#" class="nav-link">Shop</a></li>
+                    <li><a href="#" class="nav-link">Collections</a></li>
+                    <li><a href="#" class="nav-link">About Us</a></li>
+                    <li><a href="#" class="nav-link">Blog</a></li>
+                    <li><a href="#" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <a href="#" class="nav-icon" aria-label="Search">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </a>
+                    <a href="login.html" class="nav-icon" aria-label="Account">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    <a href="keranjang.html" class="nav-icon" aria-label="Cart">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M6 6h15l-1.5 9h-12z"></path>
+                            <circle cx="9" cy="20" r="1"></circle>
+                            <circle cx="18" cy="20" r="1"></circle>
+                            <path d="M6 6 5 3H2"></path>
+                        </svg>
+                    </a>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section class="best-sellers" id="best-sellers">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Produk</h2>
+                        <p class="section-subtitle">Produk favorit yang wajib kamu coba</p>
+                    </div>
+                    <div class="filter-bar">
+                        <div class="select-bar">
+                            <select id="filter-category" class="filter-select"></select>
+
+                            <select id="filter-sort" class="filter-select">
+                                <option value="" disabled selected>Urutkan</option>
+                                <option value="rating">Rating Tertinggi</option>
+                                <option value="price-asc">Harga Termurah</option>
+                                <option value="price-desc">Harga Termahal</option>
+                                <option value="title-asc">Abjad A-Z</option>
+                                <option value="title-desc">Abjad Z-A</option>
+                            </select>
+                        </div>
+
+                        <button id="btn-apply-filter" class="btn-apply-filter btn btn-primary">
+                            Terapkan
+                        </button>
+                    </div>
+                    <div class="products-grid"></div>
+                    <div class="btn-more">Load More</div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h3>Tentang Brand</h3>
+                        <p>
+                            VELVETIQUE BEAUTY menghadirkan produk kecantikan premium dengan bahan
+                            berkualitas untuk kulit sehat dan bersinar.
+                        </p>
+                        <div class="footer-social">
+                            <a href="#" aria-label="Instagram">IG</a>
+                            <a href="#" aria-label="Facebook">FB</a>
+                            <a href="#" aria-label="Twitter">TW</a>
+                        </div>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#">Shop All</a></li>
+                            <li><a href="#">New Arrivals</a></li>
+                            <li><a href="#">Best Sellers</a></li>
+                            <li><a href="#">Gift Cards</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Customer Care</h3>
+                        <ul>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Shipping</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Newsletter</h3>
+                        <p>Dapatkan update dan penawaran eksklusif langsung ke emailmu.</p>
+                        <form class="newsletter-form" onsubmit="return false;">
+                            <input type="email" placeholder="Email address" required />
+                            <button type="submit" class="btn btn-newsletter">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 VELVETIQUE BEAUTY. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="./index.js"></script>
+    </body>
+</html>
