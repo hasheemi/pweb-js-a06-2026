@@ -9,6 +9,15 @@ let checkoutButton = document.querySelector('#checkout-button');
 let checkoutModal = document.querySelector('#checkout-modal');
 let closeModal = document.querySelector('#close-modal');
 let modalOk = document.querySelector('#modal-ok');
+let logoutIcon = document.querySelector('#logout-icon');
+
+window.onload = () => {
+    if (localStorage.getItem('pzsvnpu') == 'aybl') {
+        // return;
+    } else {
+        window.location.href = 'login.html';
+    }
+};
 
 let getCart = () => {
     return JSON.parse(localStorage.getItem('cart')) || [];
@@ -154,3 +163,13 @@ checkoutModal.addEventListener('click', event => {
 });
 
 renderCart();
+
+logoutIcon.addEventListener('click', () => {
+    // console.log('sehh');
+    localStorage.removeItem('pzsvnpu');
+    localStorage.removeItem('firstName');
+    // localStorage.removeItem("pzsvnpu")
+    localStorage.removeItem('cart');
+
+    window.location.href = 'login.html';
+});

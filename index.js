@@ -13,6 +13,19 @@ let cartModalClose = document.querySelector('#cart-modal-close');
 let cartModalOk = document.querySelector('#cart-modal-ok');
 let cartModalMessage = document.querySelector('#cart-modal-message');
 
+let productModal = document.querySelector('#product-modal');
+let modalClose = document.querySelector('#modal-close');
+let modalImg = document.querySelector('#modal-img');
+let modalTitle = document.querySelector('#modal-title');
+let modalRating = document.querySelector('#modal-rating');
+let modalPrice = document.querySelector('#modal-price');
+let modalDesc = document.querySelector('#modal-desc');
+let modalAddCart = document.querySelector('#modal-add-cart');
+
+let selamatText = document.querySelector('nav h5');
+let currentProduct = null;
+let logoutIcon = document.querySelector('#logout-icon');
+
 let allProducts = [];
 let filteredArr = [];
 let displayedCount = 0;
@@ -20,6 +33,16 @@ let perPage = 10;
 let isFirstLoad = true;
 
 window.onload = async () => {
+    if (localStorage.getItem('pzsvnpu') == 'aybl') {
+        selamatText.innerHTML = `
+        
+         <h5>Selamat Datang <span>${localStorage.getItem('firstName')}</span></h5>
+        `;
+
+        // return;
+    } else {
+        window.location.href = 'login.html';
+    }
     productCon.innerHTML = '';
     await loadAllProducts();
     await loadCat();
@@ -177,20 +200,11 @@ filterBtn.addEventListener('click', () => {
     applyFilterSort();
 });
 
-let productModal = document.querySelector('#product-modal');
-let modalClose = document.querySelector('#modal-close');
-let modalImg = document.querySelector('#modal-img');
-let modalTitle = document.querySelector('#modal-title');
-let modalRating = document.querySelector('#modal-rating');
-let modalPrice = document.querySelector('#modal-price');
-let modalDesc = document.querySelector('#modal-desc');
-let modalAddCart = document.querySelector('#modal-add-cart');
-let currentProduct = null;
-
 let openModal = product => {
     currentProduct = product;
     modalImg.src = product.images[0];
     modalImg.alt = product.title;
+    modalAddCart.setAttribute('data-id', product.id);
     modalTitle.textContent = product.title;
     modalRating.textContent = `(${product.rating})`;
     modalPrice.textContent = `$ ${product.price}`;
@@ -245,7 +259,11 @@ document.addEventListener('keydown', e => {
 
 modalAddCart.addEventListener('click', () => {
     if (!currentProduct) return;
-    console.log('Added to cart:', currentProduct);
+    // console.log('Added to cart:', currentProduct);
+    // addToCart();
+    let product = productArr.find(item => item.id === Number(modalAddCart.dataset.id));
+    // console.log(product)
+    addToCart(product);
     closeModal();
 });
 
@@ -285,3 +303,13 @@ let addToCart = product => {
     cartModalMessage.textContent = `${product.title} berhasil ditambahkan ke keranjang`;
     cartModal.classList.add('show');
 };
+
+logoutIcon.addEventListener('click', () => {
+    // console.log('sehh');
+    localStorage.removeItem('pzsvnpu');
+    localStorage.removeItem('firstName');
+    // localStorage.removeItem("pzsvnpu")
+    localStorage.removeItem('cart');
+
+    window.location.href = 'login.html';
+});
