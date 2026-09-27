@@ -6,6 +6,9 @@ let discountElement = document.querySelector('#discount');
 let totalPriceElement = document.querySelector('#total-price');
 let updateCartButton = document.querySelector('#update-cart');
 let checkoutButton = document.querySelector('#checkout-button');
+let checkoutModal = document.querySelector('#checkout-modal');
+let closeModal = document.querySelector('#close-modal');
+let modalOk = document.querySelector('#modal-ok');
 
 let getCart = () => {
     return JSON.parse(localStorage.getItem('cart')) || [];
@@ -127,12 +130,27 @@ checkoutButton.addEventListener('click', () => {
     let cart = getCart();
 
     if (cart.length === 0) {
-        emptyCart.classList.remove('hidden');
-        updateSummary([]);
+        alert('Keranjang masih kosong.');
         return;
     }
 
-    emptyCart.classList.add('hidden');
+    localStorage.removeItem('cart');
+    renderCart();
+    checkoutModal.classList.add('show');
+});
+
+closeModal.addEventListener('click', () => {
+    checkoutModal.classList.remove('show');
+});
+
+modalOk.addEventListener('click', () => {
+    checkoutModal.classList.remove('show');
+});
+
+checkoutModal.addEventListener('click', event => {
+    if (event.target === checkoutModal) {
+        checkoutModal.classList.remove('show');
+    }
 });
 
 renderCart();

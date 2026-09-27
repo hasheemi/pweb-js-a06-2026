@@ -8,6 +8,11 @@ let filterBtn = document.querySelector('#btn-apply-filter');
 let searchInput = document.querySelector('.search-bar input');
 let searchBtn = document.querySelector('.search-bar .btn');
 
+let cartModal = document.querySelector('#cart-modal');
+let cartModalClose = document.querySelector('#cart-modal-close');
+let cartModalOk = document.querySelector('#cart-modal-ok');
+let cartModalMessage = document.querySelector('#cart-modal-message');
+
 let allProducts = [];
 let filteredArr = [];
 let displayedCount = 0;
@@ -244,6 +249,20 @@ modalAddCart.addEventListener('click', () => {
     closeModal();
 });
 
+cartModalClose.addEventListener('click', () => {
+    cartModal.classList.remove('show');
+});
+
+cartModalOk.addEventListener('click', () => {
+    cartModal.classList.remove('show');
+});
+
+cartModal.addEventListener('click', e => {
+    if (e.target === cartModal) {
+        cartModal.classList.remove('show');
+    }
+});
+
 let addToCart = product => {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -263,5 +282,6 @@ let addToCart = product => {
 
     localStorage.setItem('cart', JSON.stringify(cart));
 
-    alert(`${product.title} berhasil ditambahkan ke keranjang`);
+    cartModalMessage.textContent = `${product.title} berhasil ditambahkan ke keranjang`;
+    cartModal.classList.add('show');
 };
