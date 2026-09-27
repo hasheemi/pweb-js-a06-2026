@@ -19,27 +19,58 @@ let renderProducts = arr => {
     }
 
     productCon.innerHTML = '';
+
     arr.forEach(e => {
         productCon.innerHTML += `
-         <div class="product-card">
-                            <div class="product-image">
-                                <img
-                                    src="${e.images[0]}"
-                                    alt="${e.title}"
-                                />
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-name">${e.title}</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★</span>
-                                    <span class="rating-count">(${e.rating})</span>
-                                </div>
-                                <p class="product-price">$ ${e.price}</p>
-                                <a href="keranjang.html" class="btn btn-add-cart">ADD TO CART</a>
-                            </div>
-                        </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="${e.images[0]}" alt="${e.title}">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">${e.title}</h3>
+                    <div class="product-rating">
+                        <span class="stars">★</span>
+                        <span class="rating-count">(${e.rating})</span>
+                    </div>
+                    <p class="product-price">$ ${e.price}</p>
+                    <button type="button" class="btn btn-add-cart" data-id="${e.id}">
+                        ADD TO CART
+                    </button>
+                </div>
+            </div>
         `;
     });
+
+    document.querySelectorAll('.btn-add-cart').forEach(button => {
+        button.addEventListener('click', () => {
+            let productId = Number(button.dataset.id);
+            let product = productArr.find(item => item.id === productId);
+
+            addToCart(product);
+        });
+    });
+};
+
+let addToCart = product => {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    let existingProduct = cart.find(item => item.id === product.id);
+
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        cart.push({
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            thumbnail: product.thumbnail,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    alert(`${product.title} berhasil ditambahkan ke keranjang`);
 };
 
 let applyFilterSort = () => {
