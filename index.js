@@ -39,7 +39,7 @@ let renderProducts = arr => {
     productCon.innerHTML = '';
     arr.forEach(e => {
         productCon.innerHTML += `
-         <div class="product-card">
+         <div class="product-card" data-id="${e.id}>
                             <div class="product-image">
                                 <img
                                     src="${e.images[0]}"
@@ -53,7 +53,7 @@ let renderProducts = arr => {
                                     <span class="rating-count">(${e.rating})</span>
                                 </div>
                                 <p class="product-price">$ ${e.price}</p>
-                                <a href="keranjang.html" class="btn btn-add-cart">ADD TO CART</a>
+                                <a class="btn btn-add-cart" data-id="${e.id}">ADD TO CART</a>
                             </div>
                         </div>
         `;
@@ -136,7 +136,7 @@ let loadMore = () => {
                                     <span class="rating-count">(${e.rating})</span>
                                 </div>
                                 <p class="product-price">$ ${e.price}</p>
-                                <a href="keranjang.html" class="btn btn-add-cart">ADD TO CART</a>
+                                <a class="btn btn-add-cart" data-id="${e.id}">ADD TO CART</a>
                             </div>
                         </div>
         `;
@@ -203,13 +203,30 @@ let closeModal = () => {
 productCon.addEventListener('click', e => {
     let card = e.target.closest('.product-card');
     if (!card) return;
-    if (e.target.closest('.btn-add-cart')) return;
-
     let id = Number(card.dataset.id);
+    if (e.target.closest('.btn-add-cart')) {
+        // let productId = Number(button.dataset.id);
+        let product = productArr.find(item => item.id === id);
+
+        addToCart(product);
+        console.log('masuk');
+        return;
+    }
+
     let product = productArr.find(p => p.id === id);
     if (product) openModal(product);
     console.log(e);
 });
+
+// document.querySelectorAll('.btn-add-cart').forEach(button => {
+//     button.addEventListener('click', () => {
+//         let productId = Number(button.dataset.id);
+//         let product = productArr.find(item => item.id === productId);
+
+//         addToCart(product);
+//         console.log('masuk');
+//     });
+// });
 
 modalClose.addEventListener('click', closeModal);
 
@@ -226,3 +243,25 @@ modalAddCart.addEventListener('click', () => {
     console.log('Added to cart:', currentProduct);
     closeModal();
 });
+
+let addToCart = product => {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    let existingProduct = cart.find(item => item.id === product.id);
+
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        cart.push({
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            thumbnail: product.thumbnail,
+            quantity: 1,
+        });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    alert(`${product.title} berhasil ditambahkan ke keranjang`);
+};
