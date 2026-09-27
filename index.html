@@ -83,23 +83,29 @@
                         <h2 class="section-title">Produk</h2>
                         <p class="section-subtitle">Produk favorit yang wajib kamu coba</p>
                     </div>
-                    <div class="filter-bar">
-                        <div class="select-bar">
-                            <select id="filter-category" class="filter-select"></select>
+                    <div class="function-bar">
+                        <div class="filter-bar">
+                            <div class="select-bar">
+                                <select id="filter-category" class="filter-select"></select>
 
-                            <select id="filter-sort" class="filter-select">
-                                <option value="" disabled selected>Urutkan</option>
-                                <option value="rating">Rating Tertinggi</option>
-                                <option value="price-asc">Harga Termurah</option>
-                                <option value="price-desc">Harga Termahal</option>
-                                <option value="title-asc">Abjad A-Z</option>
-                                <option value="title-desc">Abjad Z-A</option>
-                            </select>
+                                <select id="filter-sort" class="filter-select">
+                                    <option value="" disabled selected>Urutkan</option>
+                                    <option value="rating">Rating Tertinggi</option>
+                                    <option value="price-asc">Harga Termurah</option>
+                                    <option value="price-desc">Harga Termahal</option>
+                                    <option value="title-asc">Abjad A-Z</option>
+                                    <option value="title-desc">Abjad Z-A</option>
+                                </select>
+                            </div>
+
+                            <button id="btn-apply-filter" class="btn-apply-filter btn btn-primary">
+                                Terapkan
+                            </button>
                         </div>
-
-                        <button id="btn-apply-filter" class="btn-apply-filter btn btn-primary">
-                            Terapkan
-                        </button>
+                        <div class="search-bar">
+                            <input type="text" id="search-input" />
+                            <div class="btn btn-primary">Cari</div>
+                        </div>
                     </div>
                     <div class="products-grid"></div>
                     <div class="btn-more">Load More</div>
@@ -154,6 +160,29 @@
                 </div>
             </div>
         </footer>
+
+        <div class="modal-overlay" id="product-modal">
+            <div class="modal-content">
+                <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+                <div class="modal-body">
+                    <div class="modal-image">
+                        <img id="modal-img" src="" alt="" />
+                    </div>
+                    <div class="modal-info">
+                        <h3 class="modal-title" id="modal-title"></h3>
+                        <div class="modal-rating">
+                            <span class="stars">★</span>
+                            <span class="rating-count" id="modal-rating"></span>
+                        </div>
+                        <p class="modal-price" id="modal-price"></p>
+                        <p class="modal-desc" id="modal-desc"></p>
+                        <button class="btn btn-add-cart modal-add-cart" id="modal-add-cart">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="./index.js"></script>
     </body>

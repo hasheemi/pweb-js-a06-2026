@@ -5,82 +5,90 @@ let productArr = [];
 let filterCat = document.querySelector('#filter-category');
 let filterSort = document.querySelector('#filter-sort');
 let filterBtn = document.querySelector('#btn-apply-filter');
+let searchInput = document.querySelector('.search-bar input');
+let searchBtn = document.querySelector('.search-bar .btn');
+
+let allProducts = [];
+let filteredArr = [];
+let displayedCount = 0;
+let perPage = 10;
+let isFirstLoad = true;
 
 window.onload = async () => {
     productCon.innerHTML = '';
-    await loadProduct(productPage);
+    await loadAllProducts();
     await loadCat();
+    applyFilterSort();
+};
+
+let loadAllProducts = async () => {
+    let db = await fetch(`https://dummyjson.com/products?limit=200`);
+    let data = await db.json();
+    allProducts = data.products;
+    productArr = [...allProducts];
 };
 
 let renderProducts = arr => {
+    productCon.classList.remove('empty');
     if (arr.length === 0) {
+        productCon.classList.add('empty');
         productCon.innerHTML = `<p class="empty-msg">Tidak ada produk yang cocok.</p>`;
         return;
     }
 
     productCon.innerHTML = '';
-
     arr.forEach(e => {
         productCon.innerHTML += `
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="${e.images[0]}" alt="${e.title}">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">${e.title}</h3>
-                    <div class="product-rating">
-                        <span class="stars">★</span>
-                        <span class="rating-count">(${e.rating})</span>
-                    </div>
-                    <p class="product-price">$ ${e.price}</p>
-                    <button type="button" class="btn btn-add-cart" data-id="${e.id}">
-                        ADD TO CART
-                    </button>
-                </div>
-            </div>
+         <div class="product-card">
+                            <div class="product-image">
+                                <img
+                                    src="${e.images[0]}"
+                                    alt="${e.title}"
+                                />
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">${e.title}</h3>
+                                <div class="product-rating">
+                                    <span class="stars">★</span>
+                                    <span class="rating-count">(${e.rating})</span>
+                                </div>
+                                <p class="product-price">$ ${e.price}</p>
+                                <a href="keranjang.html" class="btn btn-add-cart">ADD TO CART</a>
+                            </div>
+                        </div>
         `;
     });
-
-    document.querySelectorAll('.btn-add-cart').forEach(button => {
-        button.addEventListener('click', () => {
-            let productId = Number(button.dataset.id);
-            let product = productArr.find(item => item.id === productId);
-
-            addToCart(product);
-        });
-    });
 };
 
-let addToCart = product => {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    let existingProduct = cart.find(item => item.id === product.id);
-
-    if (existingProduct) {
-        existingProduct.quantity += 1;
-    } else {
-        cart.push({
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            thumbnail: product.thumbnail,
-            quantity: 1
-        });
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart));
-
-    alert(`${product.title} berhasil ditambahkan ke keranjang`);
+let updateCounter = () => {
+    let total = filteredArr.length;
+    let shown = Math.min(displayedCount, total);
+    productMoreBtn.textContent =
+        shown >= total
+            ? `Semua produk sudah dimuat (${shown}/${total})`
+            : `Load More (${shown}/${total})`;
+    productMoreBtn.disabled = shown >= total;
 };
+
+let searchText = '';
 
 let applyFilterSort = () => {
-    let cat = filterCat.value;
-    let sort = filterSort.value;
+    let result = [...allProducts];
+    let cat, sort;
+    if (isFirstLoad) {
+        cat = '';
+        sort = '';
+    } else {
+        cat = filterCat.value;
+        sort = filterSort.value;
 
-    let result = [...productArr];
+        if (searchText) {
+            result = result.filter(p => p.title.toLowerCase().includes(searchText));
+        }
 
-    if (cat) {
-        result = result.filter(p => p.category === cat);
+        if (cat) {
+            result = result.filter(p => p.category === cat);
+        }
     }
 
     if (sort === 'rating') {
@@ -93,26 +101,48 @@ let applyFilterSort = () => {
         result.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sort === 'title-desc') {
         result.sort((a, b) => b.title.localeCompare(a.title));
+    } else if (sort === '') {
     }
 
-    renderProducts(result);
+    filteredArr = result;
+    displayedCount = 0;
+    productCon.innerHTML = '';
+    isFirstLoad = false;
+    loadMore();
 };
 
-let loadProduct = async page => {
-    let db = await fetch(`https://dummyjson.com/products?limit=10&skip=${page * 10}`);
-    let data = await db.json();
-
-    if (!data.products || data.products.length === 0) {
-        productMoreBtn.textContent = 'Semua produk sudah dimuat';
-        productMoreBtn.disabled = true;
+let loadMore = () => {
+    let next = filteredArr.slice(displayedCount, displayedCount + perPage);
+    if (next.length === 0) {
+        updateCounter();
         return;
     }
+    displayedCount += next.length;
 
-    data.products.forEach(e => {
-        productArr.push(e);
+    productCon.classList.remove('empty');
+    next.forEach(e => {
+        productCon.innerHTML += `
+         <div class="product-card" data-id="${e.id}">
+                            <div class="product-image">
+                                <img
+                                    src="${e.images[0]}"
+                                    alt="${e.title}"
+                                />
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">${e.title}</h3>
+                                <div class="product-rating">
+                                    <span class="stars">★</span>
+                                    <span class="rating-count">(${e.rating})</span>
+                                </div>
+                                <p class="product-price">$ ${e.price}</p>
+                                <a href="keranjang.html" class="btn btn-add-cart">ADD TO CART</a>
+                            </div>
+                        </div>
+        `;
     });
 
-    applyFilterSort();
+    updateCounter();
 };
 
 let loadCat = async () => {
@@ -126,11 +156,73 @@ let loadCat = async () => {
     });
 };
 
-productMoreBtn.addEventListener('click', async e => {
-    productPage++;
-    await loadProduct(productPage);
+let handleSearch = () => {
+    searchText = searchInput.value.trim().toLowerCase();
+    applyFilterSort();
+};
+
+searchBtn.addEventListener('click', () => {
+    handleSearch();
+});
+productMoreBtn.addEventListener('click', () => {
+    loadMore();
 });
 
 filterBtn.addEventListener('click', () => {
     applyFilterSort();
+});
+
+let productModal = document.querySelector('#product-modal');
+let modalClose = document.querySelector('#modal-close');
+let modalImg = document.querySelector('#modal-img');
+let modalTitle = document.querySelector('#modal-title');
+let modalRating = document.querySelector('#modal-rating');
+let modalPrice = document.querySelector('#modal-price');
+let modalDesc = document.querySelector('#modal-desc');
+let modalAddCart = document.querySelector('#modal-add-cart');
+let currentProduct = null;
+
+let openModal = product => {
+    currentProduct = product;
+    modalImg.src = product.images[0];
+    modalImg.alt = product.title;
+    modalTitle.textContent = product.title;
+    modalRating.textContent = `(${product.rating})`;
+    modalPrice.textContent = `$ ${product.price}`;
+    modalDesc.textContent = product.description || '';
+    productModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+};
+
+let closeModal = () => {
+    productModal.classList.remove('active');
+    document.body.style.overflow = '';
+    currentProduct = null;
+};
+
+productCon.addEventListener('click', e => {
+    let card = e.target.closest('.product-card');
+    if (!card) return;
+    if (e.target.closest('.btn-add-cart')) return;
+
+    let id = Number(card.dataset.id);
+    let product = productArr.find(p => p.id === id);
+    if (product) openModal(product);
+    console.log(e);
+});
+
+modalClose.addEventListener('click', closeModal);
+
+productModal.addEventListener('click', e => {
+    if (e.target === productModal) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && productModal.classList.contains('active')) closeModal();
+});
+
+modalAddCart.addEventListener('click', () => {
+    if (!currentProduct) return;
+    console.log('Added to cart:', currentProduct);
+    closeModal();
 });
